@@ -1,9 +1,27 @@
 const express = require('express');
 const router = express.Router();
 
-router.get('/logged', (req, res) => {
+const isLogged = (req, res, next) => {
+  const user = req.user;
+  if(user === undefined){
+    res.redirect('no-permission');
+  } else {
+    next();
+  }
+};
+
+router.get('/logged',isLogged, (req, res) => {
   res.render('logged');
 });
+
+router.get('/profile',isLogged, (req, res) => {
+  res.render('profile');
+});
+
+router.get('/settings',isLogged, (req, res) => {
+  res.render('settings');
+});
+
 
 router.get('/no-permission', (req, res) => {
   res.render('noPermission');
